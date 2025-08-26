@@ -4,12 +4,16 @@ export
 BINARY=control-center
 MIGRATIONS_DIR=./migrations
 
-.PHONY: all build migrate psql clean create-db help
+.PHONY: all build sqlc migrate psql clean create-db help
 
-all: build create-db migrate
+all: build create-db migrate sqlc
 
 build:
 	go build -o $(BINARY) ./main.go
+
+sqlc:
+	@echo "Generating SQL code..."
+	sqlc generate
 
 create-db:
 	@echo "Creating database '$(POSTGRES_DB)' if it doesn't exist..."
