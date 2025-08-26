@@ -3,7 +3,7 @@
 -- Table IDs should be UUIDs
 CREATE EXTENSION "pgcrypto";
 
-CREATE TABLE todos (
+CREATE TABLE tasks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     status TEXT CHECK (status IN ('BACKLOG', 'TODO', 'IN_PROGRESS', 'DONE'))
@@ -12,7 +12,7 @@ CREATE TABLE todos (
 
 -- +goose Down
 -- +goose StatementBegin
-DROP EXTENSION "pgcrypto"
+DROP EXTENSION "pgcrypto";
 
-DROP TABLE todos;
+DROP TABLE tasks;
 -- +goose StatementEnd

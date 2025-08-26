@@ -11,10 +11,11 @@ import (
 	"github.com/google/uuid"
 )
 
-type Todo struct {
-	ID        uuid.UUID      `json:"id"`
-	Title     string         `json:"title"`
-	Status    sql.NullString `json:"status"`
-	CreatedAt time.Time      `json:"created_at"`
-	DeletedAt sql.NullTime   `json:"deleted_at"`
+type Task struct {
+	ID          uuid.UUID      `json:"id"`
+	Title       string         `json:"title"`
+	Status      sql.NullString `json:"status"`
+	CreatedAt   time.Time      `json:"created_at"`
+	DeletedAt   sql.NullTime   `json:"deleted_at"`
+	Description sql.NullString `json:"description"`
 }
