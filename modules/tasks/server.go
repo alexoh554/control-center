@@ -15,8 +15,7 @@ type Server struct {
 	*sqlc.Queries
 }
 
-func NewServer(db *sql.DB) *Server {
-	queries := sqlc.New(db)
+func NewServer(queries *sqlc.Queries) *Server {
 	return &Server{Queries: queries}
 }
 
