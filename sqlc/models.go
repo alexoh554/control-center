@@ -11,6 +11,16 @@ import (
 	"github.com/google/uuid"
 )
 
+type StockPurchase struct {
+	ID              uuid.UUID      `json:"id"`
+	Symbol          string         `json:"symbol"`
+	PriceCents      string         `json:"price_cents"`
+	Quantity        int32          `json:"quantity"`
+	PurchasedAt     time.Time      `json:"purchased_at"`
+	TotalPriceCents string         `json:"total_price_cents"`
+	Broker          sql.NullString `json:"broker"`
+}
+
 type Task struct {
 	ID          uuid.UUID      `json:"id"`
 	Title       string         `json:"title"`
