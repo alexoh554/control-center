@@ -23,15 +23,15 @@ INSERT INTO stock_purchases(
     broker
 )
 VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, symbol, price_cents, quantity, purchased_at, total_price_cents, broker
+RETURNING id, symbol, quantity, purchased_at, broker, price_cents, total_price_cents
 `
 
 type CreateStockPurchaseParams struct {
 	Symbol          string         `json:"symbol"`
-	PriceCents      string         `json:"price_cents"`
+	PriceCents      int32          `json:"price_cents"`
 	Quantity        int32          `json:"quantity"`
 	PurchasedAt     time.Time      `json:"purchased_at"`
-	TotalPriceCents string         `json:"total_price_cents"`
+	TotalPriceCents int32          `json:"total_price_cents"`
 	Broker          sql.NullString `json:"broker"`
 }
 
@@ -48,11 +48,11 @@ func (q *Queries) CreateStockPurchase(ctx context.Context, arg CreateStockPurcha
 	err := row.Scan(
 		&i.ID,
 		&i.Symbol,
-		&i.PriceCents,
 		&i.Quantity,
 		&i.PurchasedAt,
-		&i.TotalPriceCents,
 		&i.Broker,
+		&i.PriceCents,
+		&i.TotalPriceCents,
 	)
 	return i, err
 }
@@ -65,4 +65,39 @@ WHERE id=$1
 func (q *Queries) DeleteStockPurchase(ctx context.Context, id uuid.UUID) error {
 	_, err := q.db.ExecContext(ctx, deleteStockPurchase, id)
 	return err
+}
+
+const getStockPurchases = `-- name: GetStockPurchases :many
+SELECT id, symbol, quantity, purchased_at, broker, price_cents, total_price_cents FROM stock_purchases
+`
+
+func (q *Queries) GetStockPurchases(ctx context.Context) ([]StockPurchase, error) {
+	rows, err := q.db.QueryContext(ctx, getStockPurchases)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []StockPurchase{}
+	for rows.Next() {
+		var i StockPurchase
+		if err := rows.Scan(
+			&i.ID,
+			&i.Symbol,
+			&i.Quantity,
+			&i.PurchasedAt,
+			&i.Broker,
+			&i.PriceCents,
+			&i.TotalPriceCents,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

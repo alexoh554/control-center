@@ -1,3 +1,3 @@
 package portfolio
 
-type Client struct{}
+type Client interface{}

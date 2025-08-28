@@ -13,3 +13,6 @@ RETURNING *;
 -- name: DeleteStockPurchase :exec
 DELETE FROM stock_purchases
 WHERE id=$1;
+
+-- name: GetStockPurchases :many
+SELECT * FROM stock_purchases;

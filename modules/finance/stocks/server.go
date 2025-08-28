@@ -1,4 +1,4 @@
-package portfolio
+package stocks
 
 import (
 	"database/sql"
@@ -29,10 +29,10 @@ func (s *Server) Register(router *mux.Router) {
 func (s *Server) Create(w http.ResponseWriter, r *http.Request) {
 	var req struct {
 		Symbol          string    `json:"symbol"`
-		PriceCents      string    `json:"price_cents"`
+		PriceCents      int32     `json:"price_cents"`
 		Quantity        int32     `json:"quantity"`
 		PurchasedAt     time.Time `json:"purchased_at"`
-		TotalPriceCents string    `json:"total_price_cents"`
+		TotalPriceCents int32     `json:"total_price_cents"`
 		Broker          string    `json:"broker"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
