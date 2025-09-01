@@ -8,6 +8,10 @@ import (
 	"github.com/alexoh554/control-center/sqlc"
 )
 
+func NewClient() *Client {
+	return &Client{}
+}
+
 type Client struct{}
 
 // Get stock purchases grouped by symbol, regardless of purchase date
